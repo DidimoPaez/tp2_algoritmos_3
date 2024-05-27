@@ -1,2 +1,2 @@
-# Dídomo Paez: 98910
+# Dídimo Paez: 98910
 # Ricardo Contreras: 107239
