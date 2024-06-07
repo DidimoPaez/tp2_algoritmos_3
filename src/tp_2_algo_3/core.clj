@@ -13,7 +13,7 @@
 (def pos-limites 3)
 
 (def limites-coordenadas-inicial [0 0 0 0])
-(def recuadro-movimiento 10)
+(def recuadro-movimiento 0)
 ;(def limites-display-svg [-15 -15 50 50]) ;ESTO HAY QUE BORRARLO, ESO SOLO DE PRUEBA///////////////////
 (def inicio-primera-linea "<svg viewBox=\"")
 (def final-primera-linea  "\" xmlns=\"http://www.w3.org/2000/svg\">")
@@ -55,7 +55,7 @@
 ;Para el "v2" se puede hacer un vector que sea constante y declararlo con "def"
 (defn join-vectors [x1 y1 x2 y2 stroke-width stroke]
   (let [v1 [(str x1) (str y1) (str x2) (str y2) (str stroke-width) (str stroke)]
-        v2 ["<line x1=\""  "\" y1=\"" "\" x2=\"" "\" y2=\"" "\" stroke-width=\"" "\" stroke=\""]]
+        v2 ["  <line x1=\""  "\" y1=\"" "\" x2=\"" "\" y2=\"" "\" stroke-width=\"" "\" stroke=\""]]
     (str (apply str(map str v2 v1))  "\" />")))
 
 
