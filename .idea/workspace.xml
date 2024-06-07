@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="4b02fdb8-e3e8-42cc-a48b-8266c0b90409" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/target/classes/META-INF/maven/tp_2_algo_3/tp_2_algo_3/pom.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/repl-port" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/stale/leiningen.core.classpath.extract-native-dependencies" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/test/stale/leiningen.core.classpath.extract-native-dependencies" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.clj-kondo/.cache/v1/clj/tp-2-algo-3.core.transit.json" beforeDir="false" afterPath="$PROJECT_DIR$/.clj-kondo/.cache/v1/clj/tp-2-algo-3.core.transit.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LICENSE" beforeDir="false" afterPath="$PROJECT_DIR$/LICENSE" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/doc/arbol.sl" beforeDir="false" afterPath="$PROJECT_DIR$/doc/arbol.sl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/doc/intro.md" beforeDir="false" afterPath="$PROJECT_DIR$/doc/intro.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/doc/peano.sl" beforeDir="false" afterPath="$PROJECT_DIR$/doc/peano.sl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project.clj" beforeDir="false" afterPath="$PROJECT_DIR$/project.clj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/tp_2_algo_3/core_test.clj" beforeDir="false" afterPath="$PROJECT_DIR$/test/tp_2_algo_3/core_test.clj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tp_2_algo_3.iml" beforeDir="false" afterPath="$PROJECT_DIR$/tp_2_algo_3.iml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
+  <component name="ProjectId" id="2hKuF16lg1YtWE6CHuooJE8y6ic" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Clojure Application.tp-2-algo-3.core.executor": "Run",
+    "Clojure REPL.REPL for tp_2_algo_3.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "Merging etapa__1__didimo",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/Didimo/Desktop/Algoritmos III/Archivos TP2/begining_tp2",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "project.propCompiler",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Didimo\Desktop\Algoritmos III\TP2\tp2_algoritmos_3\doc" />
+    </key>
+  </component>
+  <component name="ReplState" timestamp="1717789708049">{:repl-history {:ide [], :local [{:command &quot;\n(def avance_tortuga 1)\n(def color_negro \&quot;black\&quot;)\n(def angulo_acumulado_inicial 0)\n(def grosor_pluma \&quot;1\&quot;)\n(def ancho_pluma 1)\n(def pos_inicial_x 0)\n(def pos_inicial_y 0)\n(def pos_movimientos 2)\n\n(def map-height 500)\n(def map-width 500)\n\n(def top_left_corner (mapv #(/ % 2) [(* -1 map-width) (* -1  map-height)]))\n\n(defn crear_tortuga [angulo pos_x pos_y]\n  {:angulo angulo\n   :angulo_acumulado angulo_acumulado_inicial\n   :pos_x pos_x\n   :pos_y pos_y\n   :pluma true\n   :color \&quot;black\&quot;\n   :ancho_pluma ancho_pluma})\n\n(defn getter_angulo [tortuga]\n  (tortuga :angulo))\n(defn getter_angulo_acumulado [tortuga]\n  (tortuga :angulo_acumulado))\n(defn getter_pos_x [tortuga]\n  (tortuga :pos_x))\n(defn getter_pos_y [tortuga]\n  (tortuga :pos_y))\n(defn getter_pluma [tortuga]\n  (tortuga :pluma))\n\n(defn setter_angulo [tortuga nueva_angulo]\n  (assoc tortuga :angulo nueva_angulo))\n(defn setter_angulo_acumulado [tortuga nuevo_angulo]\n  (assoc tortuga :angulo_acumulado nuevo_angulo))\n(defn setter_pos_x [tortuga nueva_x]\n  (assoc tortuga :pos_x nueva_x))\n(defn setter_pos_y [tortuga nueva_y]\n  (assoc tortuga :pos_y nueva_y))\n(defn setter_pluma [tortuga estado_pluma]\n  (assoc tortuga :pluma estado_pluma))\n\n\n;VER SI EL FORMATO ANDA POR EL TEMA DE LAS COMILLAS!!!\n;Para el \&quot;v2\&quot; se puede hacer un vector que sea constante y declararlo con \&quot;def\&quot;\n(defn join_vectors [x1 y1 x2 y2 stroke-width stroke]\n  (let [v1 [(str x1) (str y1) (str x2) (str y2) (str stroke-width) (str stroke)]\n        v2 [\&quot;&lt;line x1=\\\&quot;\&quot;  \&quot;\\\&quot; y1=\\\&quot;\&quot; \&quot;\\\&quot; x2=\\\&quot;\&quot; \&quot;\\\&quot; y2=\\\&quot;\&quot; \&quot;\\\&quot; stroke-width=\\\&quot;\&quot; \&quot;\\\&quot; stroke=\\\&quot;\&quot;]]\n    (str (apply str(map str v2 v1))  \&quot;\\\&quot; /&gt;\&quot;)))\n\n\n;VERRRR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n;SI HACE FALTA CONTEMPLAR EL DERECHA O IZQUIERDA CON EL SIGNO NEGATIVO PARA LA \&quot;y\&quot; POR\n;EL TEMA DEL EJECARTESIANO\n(defn cambio_angulo [tortuga sentido]\n  (let [ang (getter_angulo tortuga)\n        ang_acumulado (getter_angulo_acumulado tortuga)]\n    (case sentido\n      \\+ (setter_angulo_acumulado tortuga (- ang_acumulado ang))\n      \\- (setter_angulo_acumulado tortuga (+ ang_acumulado ang))\n      \\| (setter_angulo_acumulado tortuga (+ 180 ang_acumulado))\n      :else tortuga)))          ;DEVUELVE UNA COPIA DE TORTUGA\n\n;VERRRRRR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n;SI EL MENOS DE LA COORDENADA \&quot;y\&quot; ESTÁ ES CORRECTA, DEBIDO A QUE EL EJE Y ESTÁ INVERTIDO\n(defn mover_tortuga [tortuga]\n  (let [a (java.lang.Math/toRadians(getter_angulo_acumulado tortuga))\n        avance_en_x (* avance_tortuga (Math/cos a))\n        avance_en_y (* avance_tortuga (Math/sin a))\n        pos_inicial_x (getter_pos_x tortuga)\n        pos_inicial_y (getter_pos_y tortuga)\n        pos_final_x (+ pos_inicial_x avance_en_x)\n        pos_final_y (- pos_inicial_y avance_en_y)]\n    (-&gt; tortuga\n        (setter_pos_x pos_final_x)          ;SE ENVIARÀ UNA COPIA DE TORTUGA\n        (setter_pos_y pos_final_y))))       ;SE ENVIARÀ UNA COPIA DE TORTUGA\n\n(defn pluma_arriba [tortuga]\n  (setter_pluma tortuga false))             ;SE ENVIARÀ UNA COPIA DE TORTUGA\n\n(defn pluma_abajo [tortuga]\n  (setter_pluma tortuga true))\n\n;recibirá la copia de la tortuga anterior y a partir de los datos de ella se apilará \&quot;la nueva tortuga\&quot;\n(defn apilar_tortuga [v_pila tortuga]\n  (-&gt; v_pila\n      (assoc (dec (count v_pila)) tortuga)\n      (conj tortuga)))\n\n(defn desapilar_tortuga [v_pila movimientos]\n  (let [pila_actualizada (pop v_pila)\n        tortuga_a_emplear (peek pila_actualizada)]\n    [pila_actualizada tortuga_a_emplear movimientos]))      ;VERIFICAR QUE EL PUSH/POP SE HAGA SOBRE EL PRIMER ELEMENTO\n\n\n;en el vector \&quot;movimientos\&quot; se apilará el movimiento nuevo que se le pasará al SVG\n;esta funcion devuelve un vector, pues movs es de tipo \&quot;vector\&quot; y conj devuelve el mismo tipo\n(defn pre_svg [movimientos t_estado_1 t_estado_2]\n  (let [movs movimientos\n        t1 t_estado_1\n        t2 t_estado_2]\n    (conj movs (join_vectors (getter_pos_x t1)(getter_pos_y t1)(getter_pos_x t2)(getter_pos_y t2) grosor_pluma color_negro))))\n\n\n;PARA QUE UN VECTOR ACTÚE COMO UNA LISTA SE DEBEN USAR LOS COMANDOS: \&quot;(conj v 5)\&quot; y \&quot;(pop v)\&quot;, siendo \&quot;v\&quot; el vector\n(defn enviar_a_mover [tortugas tortuga movimientos]\n  (let [t_estado_1 tortuga\n        t_estado_2 (mover_tortuga tortuga)\n        movs movimientos]\n    (if (= true (getter_pluma t_estado_1))\n      [tortugas t_estado_2 (pre_svg movs t_estado_1 t_estado_2)]\n      [tortugas (pluma_abajo t_estado_2) movimientos]))) ;VUELVE A DEJAR LA PLUMA ABAJO (true)\n\n(defn movimiento_tortuga [tortuga guia]\n  (let [tortugas_inicial (conj [] tortuga)\n        movimientos_inicial []]\n    (reduce (fn [[tortugas tortuga movimientos] %]          ;ELIMINAR LA FUNCION: \&quot;tortuga_actual\&quot;\n              (cond\n                (or (= \\F %) (= \\G %))\n                (enviar_a_mover tortugas tortuga movimientos) ;RECIBE UN VECTOR CON TRES ELEMENTOS\n\n                (or (= \\f %) (= \\g %))\n                (enviar_a_mover tortugas (pluma_arriba tortuga) movimientos)\n\n                (or (= \\+ %) (= \\- %) (= \\| %))\n                [tortugas (cambio_angulo tortuga %) movimientos]\n\n                (= \\[ %)\n                [(apilar_tortuga tortugas tortuga) tortuga movimientos]\n\n                (= \\] %)\n                (desapilar_tortuga tortugas movimientos)\n\n                :else [tortugas tortuga movimientos]))\n            [tortugas_inicial tortuga movimientos_inicial] guia)))\n\n\n;Recibe un vector donde esten las reglas. ejemplo:\n;(generar_reglas [\&quot;F XF+F\&quot; \&quot;G XX-F\&quot;])\n;Y devuelve un diccionario con clave:valor. Ejemplo:\n;{:F \&quot;XF+F\&quot;, :G \&quot;XX-F\&quot;} , (OJO!! que la clave es una \&quot;keyword\&quot;)\n(defn generar_reglas [v]\n  (reduce (fn [acc x]\n            (let [regla_key (first x)\n                  regla_value (subs x 2)]\n              (assoc acc (keyword (str regla_key)) regla_value)))\n          {} v))\n\n(defn parser_line [s]\n  (reduce (fn [acc x]\n            (if (not= x \\newline)\n              (str acc x)\n              (reduced acc)))\n          \&quot;\&quot; s))\n\n;; Tener presente que \&quot;drop\&quot; devuelve una secuencia, y al final del let lo que se está concatenando\n;;es un string, por eso hay que utilizar \&quot;apply str\&quot;\n;devuelve un vector de strings. (Ej: recibiendo: \&quot;(parser_file \&quot;25\\nX\\nF XF+F\\nG XX-F\\n\&quot;)\&quot;\n;devolverá: \&quot;[\&quot;25\&quot; \&quot;X\&quot; \&quot;F XF+F\&quot; \&quot;G XX-F\&quot;]\&quot;\n(defn parser_file [s]\n  (if (&lt;= (count s) 0)\n    '()\n    (let [linea (parser_line s)\n          resto (drop (inc (count linea)) s)]\n      (vec (cons linea (parser_file (apply str resto)))))))\n\n(defn leer_archivo [archivo]\n  (slurp archivo))\n\n(defn etapa_lectura [archivo]\n  (-&gt; archivo\n      (leer_archivo)\n      (parser_file)))\n\n(defn traducir [reglas axioma]\n  (apply str (map #(get reglas (keyword (str %)) (str %)) axioma)))\n\n;;funcion que en el TP se llama \&quot;tortuga\&quot;\n(defn guia_para_tortuga [iteraciones axioma reglas]\n  (if (= iteraciones 0)\n    axioma\n    (let [nuevo-axioma (traducir reglas axioma)]\n      (guia_para_tortuga (dec iteraciones) nuevo-axioma reglas))))\n\n\n;en esta funcion se filtra el caso borde en el que se pase como numero de iteraciones el cero\n;devolviendo inmediatamete el valor del axioma como guía, caso contrario empieza a iterar\n;para obtener la guia\n#_\n        (defn guia_para_tortuga [iteraciones axioma reglas]\n          (if (= iteraciones 0)\n            axioma\n            (generacion_guia_para_tortuga iteraciones axioma reglas)))\n\n(defn obtencion_angulo_guia [archivo_lectura iteraciones]\n  (let [vector_base (etapa_lectura archivo_lectura)          ;vector base:(pos 0: angulo; pos 1: axioma; &gt; pos 1: reglas)\n        angulo (first vector_base)\n        axioma (second vector_base)\n        reglas (generar_reglas (vec (drop 2 vector_base))) ;devuelve un diccionario con la reglas\n        guia (guia_para_tortuga iteraciones axioma reglas)]\n    [angulo guia]))\n\n(defn obtencion_vector_para_svg [tortuga guia]\n  (-&gt; tortuga\n      (movimiento_tortuga guia)))\n\n(defn -main [&amp; args]\n  (if (not= (count args) 2)                               ;;3\n    (println \&quot;Debes ingresar 2 argumentos para ejecutar el programa (ruta archivo lectura, cantidad de veces\n    a implementar el fractal, ruta archivo escritura\\n\&quot;)\n    (let [vector_angulo_guia (obtencion_angulo_guia (first args) (Integer/parseInt (second args)))\n          angulo (Double/parseDouble(first vector_angulo_guia))   ;VER MANEJO DE ERRORES (VALIDAR NUMERO)\n          guia (second vector_angulo_guia)\n          tortuga (crear_tortuga angulo pos_inicial_x pos_inicial_y)\n          vector_para_svg (obtencion_vector_para_svg tortuga guia)\n          movimientos_svg (nth vector_para_svg pos_movimientos)]\n      ;escritura_svg (escribir_en_svg movimientos_svg)\n      (println movimientos_svg))))\n\n\n\n\n&quot;, :offset 8686, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(turtle (crear_tortuga 25 0 0))&quot;, :offset 29, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(def turtle (crear_tortuga 25 0 0))&quot;, :offset 35, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(turtle :angulo)&quot;, :offset 16, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(:angulo turtle)&quot;, :offset 6, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(for [a [1 2]\n      b [a, (- a)]]\n  (* 3 b))&quot;, :offset 44, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(for [a [1 2]\n      b [a, (- a)]\n      c 5]\n  (* 3 b))&quot;, :offset 42, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(for [a [1 2]\n      b [a, (- a)]\n      c [5]]\n  (* 3 b))&quot;, :offset 42, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(for [a [1 2]\n      b [a, (- a)]\n      c [* 5 b]]\n  (* 3 c))&quot;, :offset 60, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(defn choose [lst]\n  (domonad list-monad\n           [a lst\n            b lst]\n           [a b]))&quot;, :offset 96, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(def list-monad {\n                 :return (fn [v] [v])\n                 :bind (fn [mv f]\n                         (if (seq mv)\n                           (apply concat (map f mv))\n                           []))})\n\n(defn choose [lst]\n  (domonad list-monad\n           [a lst\n            b lst]\n           [a b]))&quot;, :offset 312, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(def list-monad {\n                 :return (fn [v] [v])\n                 :bind (fn [mv f]\n                         (if (seq mv)\n                           (apply concat (map f mv))\n                           []))})&quot;, :offset 214, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(defn vec-de-lim-a-str [vector-de-limites]\n  (let [str-vec (str vector-de-limites)]\n    (subs str-vec 1 (- (count str-vec) 1))))&quot;, :offset 128, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(vec-de-lim-a-str [3 5 8 9])&quot;, :offset 26, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(str [3 5 8 9])&quot;, :offset 14, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(apply str [3 5 8 9])&quot;, :offset 7, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(apply str \&quot; \&quot; [3 5 8 9])&quot;, :offset 13, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(apply str \&quot;,\&quot; [3 5 8 9])&quot;, :offset 13, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(apply str \&quot;,\&quot; '[3 5 8 9])&quot;, :offset 16, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(apply str/join [3 5 8 9])&quot;, :offset 26, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(String/join [3 5 8 9])&quot;, :offset 1, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(map str [3 5 8 9])&quot;, :offset 19, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(map str \&quot; \&quot; [3 5 8 9])&quot;, :offset 11, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(concat (map str [3 5 8 9]))&quot;, :offset 28, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(concat (map str '[3 5 8 9]))&quot;, :offset 18, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(concat (map (apply str) [3 5 8 9]))&quot;, :offset 20, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(map #(concat str %) [3 5 8 9])&quot;, :offset 31, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(map #(concat %) [3 5 8 9])&quot;, :offset 13, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(map concat [ ] [3 5 8 9])&quot;, :offset 14, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(concat \&quot;sd\&quot; \&quot;afd\&quot;)&quot;, :offset 17, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(str(concat \&quot;sd\&quot; \&quot;afd\&quot;))&quot;, :offset 4, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(apply str(concat \&quot;sd\&quot; \&quot;afd\&quot;))&quot;, :offset 7, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(concat [1 3 5] [3 5 7])&quot;, :offset 22, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(apply str(concat [1 3 5] [3 5 7]))&quot;, :offset 10, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(apply str \&quot; \&quot; (concat [1 3 5] [3 5 7]))&quot;, :offset 13, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(map #(concat % \&quot; \&quot;) [3 4 5])&quot;, :offset 27, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(map #(concat % [\&quot; \&quot;]) [3 4 5])&quot;, :offset 17, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(map #(interleave % [\&quot; \&quot;]) [3 4 5])&quot;, :offset 33, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(map #(interleave % \&quot; \&quot;) [3 4 5])&quot;, :offset 22, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(concat \&quot; \&quot; \&quot;3\&quot; \&quot;4\&quot;)&quot;, :offset 18, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(str(concat \&quot; \&quot; \&quot;3\&quot; \&quot; \&quot; \&quot;4\&quot;))&quot;, :offset 4, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(apply str(concat \&quot; \&quot; \&quot;3\&quot; \&quot; \&quot; \&quot;4\&quot;))&quot;, :offset 7, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(map #(concat (str %) \&quot; \&quot;) [1 2 3 4])&quot;, :offset 37, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(apply str(map #(concat (str %) \&quot; \&quot;) [1 2 3 4]))&quot;, :offset 10, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(apply flatten(map #(concat (str %) \&quot; \&quot;) [1 2 3 4]))&quot;, :offset 14, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(apply flatten '(map #(concat (str %) \&quot; \&quot;) [1 2 3 4]))&quot;, :offset 15, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(flatten '(map #(concat (str %) \&quot; \&quot;) [1 2 3 4]))&quot;, :offset 1, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(flatten (map #(concat (str %) \&quot; \&quot;) [1 2 3 4]))&quot;, :offset 9, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(apply str(flatten (map #(concat (str %) \&quot; \&quot;) [1 2 3 4])))&quot;, :offset 10, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(str/join \&quot; \&quot; [1 2 3 4])&quot;, :offset 22, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(str/join \&quot;,\&quot; [1 2 3 4])&quot;, :offset 12, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(str/join \&quot;,\&quot; [[5 7 8] [3 4 2] [1 2 3 4]])&quot;, :offset 21, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(str(concat \&quot;1 23 3\&quot; \&quot;3 4 5\&quot;))&quot;, :offset 27, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(apply str(concat \&quot;1 23 3\&quot; \&quot;3 4 5\&quot;))&quot;, :offset 7, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(tp-2-algo-3.core/-main \&quot;doc/arbol.sl\&quot;)&quot;, :offset 17, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(tp-2-algo-3.core/-main \&quot;doc/arbol.sl\&quot; 2 \&quot;PRUEBA.txt\&quot;)&quot;, :offset 52, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(tp-2-algo-3.core/-main \&quot;doc/arbol.sl\&quot; 2)&quot;, :offset 40, :ns &quot;tp-2-algo-3.core&quot;} {:command &quot;(tp-2-algo-3.core/-main \&quot;doc/arbol.sl\&quot; \&quot;2\&quot;)&quot;, :offset 43, :ns &quot;tp-2-algo-3.core&quot;}], :remote []}}</component>
+  <component name="RunManager">
+    <configuration default="true" type="Babashka" factoryName="BabashkaLocalRepl" activateToolWindowBeforeRun="false">
+      <setting name="displayName" value="" />
+      <setting name="bbPath" value="" />
+      <setting name="parameters" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <setting name="workingDir" value="" />
+      <setting name="focusEditor" value="false" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="REPL for tp_2_algo_3" type="ClojureREPL" factoryName="Local" activateToolWindowBeforeRun="false" temporary="true">
+      <option name="configVersion" value="1" />
+      <option name="displayName" value="REPL for tp_2_algo_3" />
+      <option name="execution" value="LEININGEN" />
+      <module name="tp_2_algo_3" />
+      <option name="options" />
+      <option name="profiles" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="ClojureREPL" factoryName="Local" activateToolWindowBeforeRun="false">
+      <option name="configVersion" value="1" />
+      <option name="options" />
+      <option name="profiles" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="ClojureREPL" factoryName="Remote" activateToolWindowBeforeRun="false">
+      <setting name="displayName" value="" />
+      <setting name="host" value="" />
+      <setting name="port" value="0" />
+      <setting name="replType" value="SOCKET" />
+      <setting name="configType" value="SPECIFY" />
+      <setting name="replPortFileType" value="STANDARD" />
+      <setting name="customPortFile" value="" />
+      <setting name="fixLineNumbers" value="false" />
+      <setting name="focusEditor" value="false" />
+      <setting name="urlFile" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Clojure REPL.REPL for tp_2_algo_3" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="jdk-21.0.2-openjdk-21.0.2-4caba194b151-4f524021" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="4b02fdb8-e3e8-42cc-a48b-8266c0b90409" name="Changes" comment="" />
+      <created>1717354985851</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1717354985851</updated>
+      <workItem from="1717354986985" duration="18394000" />
+      <workItem from="1717737791392" duration="2868000" />
+      <workItem from="1717773796452" duration="13901000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

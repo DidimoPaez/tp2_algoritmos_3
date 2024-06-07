@@ -10,9 +10,11 @@
 (def pos-inicial-x 0)
 (def pos-inicial-y 0)
 (def pos-movimientos 2)
+(def pos-limites 3)
 
-
-(def limites_display_svg [-15 -15 50 50]) ;ESTO HAY QUE BORRARLO, ESO SOLO DE PRUEBA
+(def limites-coordenadas-inicial [0 0 0 0])
+(def recuadro-movimiento 10)
+;(def limites-display-svg [-15 -15 50 50]) ;ESTO HAY QUE BORRARLO, ESO SOLO DE PRUEBA///////////////////
 (def inicio-primera-linea "<svg viewBox=\"")
 (def final-primera-linea  "\" xmlns=\"http://www.w3.org/2000/svg\">")
 (def ultima-linea "</svg>")
@@ -95,10 +97,10 @@
       (assoc (dec (count v-pila)) tortuga)
       (conj tortuga)))
 
-(defn desapilar-tortuga [v-pila movimientos]
+(defn desapilar-tortuga [v-pila movimientos coord-limits]
   (let [pila-actualizada (pop v-pila)
         tortuga-a-emplear (peek pila-actualizada)]
-    [pila-actualizada tortuga-a-emplear movimientos]))      ;VERIFICAR QUE EL PUSH/POP SE HAGA SOBRE EL PRIMER ELEMENTO
+    [pila-actualizada tortuga-a-emplear movimientos coord-limits]))       ;VERIFICAR QUE EL PUSH/POP SE HAGA SOBRE EL PRIMER ELEMENTO
 
 
 ;en el vector "movimientos" se apilará el movimiento nuevo que se le pasará al SVG
@@ -110,37 +112,58 @@
     (conj movs (join-vectors (getter-pos-x t1)(getter-pos-y t1)(getter-pos-x t2)(getter-pos-y t2) grosor-pluma color-negro))))
 
 
+
+(defn pos-maxima [pos-1 pos-2 pos-3]
+  (min pos-1 pos-2 pos-3))
+(defn pos-minima [pos-1 pos-2 pos-3]
+  (min pos-1 pos-2 pos-3))
+
+
+(defn actualizar-coordenadas [coord-limits t-estado-1 t-estado-2]
+  (let [t-pos-x1 (getter-pos-x t-estado-1)
+        t-pos-x2 (getter-pos-x t-estado-2)
+        min-x (pos-minima t-pos-x1 t-pos-x2 (coord-limits 0))
+        max-x (pos-maxima t-pos-x1 t-pos-x2 (coord-limits 2))
+        t-pos-y1 (getter-pos-y t-estado-1)
+        t-pos-y2 (getter-pos-y t-estado-2)
+        min-y (pos-minima t-pos-y1 t-pos-y2 (coord-limits 1))
+        max-y (pos-maxima t-pos-y1 t-pos-y2 (coord-limits 3))]
+    [min-x min-y max-x max-y]))
+
 ;PARA QUE UN VECTOR ACTÚE COMO UNA LISTA SE DEBEN USAR LOS COMANDOS: "(conj v 5)" y "(pop v)", siendo "v" el vector
-(defn enviar-a-mover [tortugas tortuga movimientos]
+(defn enviar-a-mover [tortugas tortuga movimientos coord-limits]
   (let [t-estado-1 tortuga
         t-estado-2 (mover-tortuga tortuga)
-        movs movimientos]
+        movs movimientos
+        cl coord-limits]
     (if (= true (getter-pluma t-estado-1))
-      [tortugas t-estado-2 (pre-svg movs t-estado-1 t-estado-2)]
-      [tortugas (pluma-abajo t-estado-2) movimientos]))) ;VUELVE A DEJAR LA PLUMA ABAJO (true)
+      [tortugas t-estado-2 (pre-svg movs t-estado-1 t-estado-2) (actualizar-coordenadas cl t-estado-1 t-estado-2)]
+      [tortugas (pluma-abajo t-estado-2) movs cl]))) ;VUELVE A DEJAR LA PLUMA ABAJO (true)
 
 (defn movimiento-tortuga [tortuga guia]
   (let [tortugas-inicial (conj [] tortuga)
-        movimientos-inicial []]
-    (reduce (fn [[tortugas tortuga movimientos] %]          ;ELIMINAR LA FUNCION: "tortuga-actual"
+        movimientos-inicial []
+        init-coord-limits limites-coordenadas-inicial]
+    (reduce (fn [[tortugas tortuga movimientos coord-limits] %]          ;ELIMINAR LA FUNCION: "tortuga-actual"
               (cond
                 (or (= \F %) (= \G %))
-                (enviar-a-mover tortugas tortuga movimientos) ;RECIBE UN VECTOR CON TRES ELEMENTOS
+                (enviar-a-mover tortugas tortuga movimientos coord-limits) ;RECIBE UN VECTOR CON TRES ELEMENTOS
 
                 (or (= \f %) (= \g %))
-                (enviar-a-mover tortugas (pluma-arriba tortuga) movimientos)
+                (enviar-a-mover tortugas (pluma-arriba tortuga) movimientos coord-limits)
 
                 (or (= \+ %) (= \- %) (= \| %))
-                [tortugas (cambio-angulo tortuga %) movimientos]
+                [tortugas (cambio-angulo tortuga %) movimientos coord-limits]
 
                 (= \[ %)
-                [(apilar-tortuga tortugas tortuga) tortuga movimientos]
+                [(apilar-tortuga tortugas tortuga) tortuga movimientos coord-limits]
 
                 (= \] %)
-                (desapilar-tortuga tortugas movimientos)
+                (desapilar-tortuga tortugas movimientos coord-limits)
 
-                :else [tortugas tortuga movimientos]))
-            [tortugas-inicial tortuga movimientos-inicial] guia)))
+                :else [tortugas tortuga movimientos coord-limits]))
+            [tortugas-inicial tortuga movimientos-inicial init-coord-limits] guia)))
+
 
 
 ;Recibe un vector donde esten las reglas. ejemplo:
@@ -183,6 +206,13 @@
 (defn traducir [reglas axioma]
   (apply str (map #(get reglas (keyword (str %)) (str %)) axioma)))
 
+(defn obtencion-limites-display [coord-limit]
+  (let [x-min (- (coord-limit 0) recuadro-movimiento )
+        y-min (- (coord-limit 1) recuadro-movimiento)
+        x-max (+ (coord-limit 2) recuadro-movimiento)
+        y-max (+ (coord-limit 3) recuadro-movimiento)]
+    [x-min y-min x-max y-max]))
+
 ;;funcion que en el TP se llama "tortuga"
 (defn guia-para-tortuga [iteraciones axioma reglas]
   (if (= iteraciones 0)
@@ -190,15 +220,6 @@
     (let [nuevo-axioma (traducir reglas axioma)]
       (guia-para-tortuga (dec iteraciones) nuevo-axioma reglas))))
 
-
-;en esta funcion se filtra el caso borde en el que se pase como numero de iteraciones el cero
-;devolviendo inmediatamete el valor del axioma como guía, caso contrario empieza a iterar
-;para obtener la guia
-#_
-(defn guia-para-tortuga [iteraciones axioma reglas]
-  (if (= iteraciones 0)
-    axioma
-    (generacion-guia-para-tortuga iteraciones axioma reglas)))
 
 (defn obtencion-angulo-guia [archivo-lectura iteraciones]
   (let [vector-base (etapa-lectura archivo-lectura)          ;vector base:(pos 0: angulo; pos 1: axioma; > pos 1: reglas)
@@ -212,14 +233,9 @@
   (-> tortuga
       (movimiento-tortuga guia)))
 
-;pasa el vector de limites a string
-(defn vec-de-lim-a-str [vector-de-limites]
-  (let [str-vec (str vector-de-limites)]
-    (subs str-vec 1 (- (count str-vec) 1))))
-
 ;Coloca los limites en la primera linea del svg
-(defn inicializar-primera-linea [comienzo-primera-linea ultima-parte-primera-linea]
-  (let [limites (vec-de-lim-a-str limites_display_svg)]
+(defn inicializar-primera-linea [comienzo-primera-linea limites-display-svg ultima-parte-primera-linea]
+  (let [limites (str/join " " limites-display-svg)]
     (str comienzo-primera-linea limites ultima-parte-primera-linea)))
 
 ;Obtiene un vector con la primera y la ultima fila del arch svg
@@ -227,22 +243,23 @@
   (vec (cons linea (conj vec-movimientos ultima-linea))))
 
 ;Escribe en el archivo svg
-(defn escritura-svg [archivo-escritura movimientos] 
-  (let [primera-linea (inicializar-primera-linea inicio-primera-linea final-primera-linea)
+(defn escritura-svg [archivo-escritura movimientos limites-display-svg]
+  (let [primera-linea (inicializar-primera-linea inicio-primera-linea limites-display-svg final-primera-linea)
         vec-lineas-svg-totales (obtencion-vector-svg primera-linea movimientos)]
     (spit archivo-escritura (str/join "\n" vec-lineas-svg-totales))))
 
 (defn -main [& args]
   (if (not= (count args) 3)                               ;;3
-    (println "Debes ingresar 2 argumentos para ejecutar el programa (ruta archivo lectura, cantidad de veces
+    (println "Debes ingresar 3 argumentos para ejecutar el programa (ruta archivo lectura, cantidad de veces
     a implementar el fractal, ruta archivo escritura\n")
     (let [vector-angulo-guia (obtencion-angulo-guia (first args) (Integer/parseInt (second args)))
           angulo (Double/parseDouble(first vector-angulo-guia))   ;VER MANEJO DE ERRORES (VALIDAR NUMERO)
           guia (second vector-angulo-guia)
           tortuga (crear-tortuga angulo pos-inicial-x pos-inicial-y)
           vector-para-svg (obtencion-vector-para-svg tortuga guia)
-          movimientos-svg (nth vector-para-svg pos-movimientos)]
-      (escritura-svg (nth args 2) movimientos-svg))))
+          movimientos-svg (nth vector-para-svg pos-movimientos)
+          limites-display-svg (obtencion-limites-display (nth vector-para-svg pos-limites))] ;[x-min y-min x-max y-max]]
+      (escritura-svg (nth args 2) movimientos-svg limites-display-svg))))
 
 
 
