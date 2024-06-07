@@ -1,20 +1,160 @@
 (ns tp-2-algo-3.core
-  (:gen-class))
+  (:gen-class)
+  (:require [clojure.string :as str]))
 
-(def caracteres-permitidos ["F" "f" "G" "g" "+" "-" "[" "]" "|"])
+(def avance-tortuga 1)
+(def color-negro "black")
+(def angulo-acumulado-inicial 0)
+(def grosor-pluma "1")
+(def ancho-pluma 1)
+(def pos-inicial-x 0)
+(def pos-inicial-y 0)
+(def pos-movimientos 2)
 
-;Recibe una lista done esten las reglas. ejemplo:
-;("F FF", "G FG")
+
+(def limites_display_svg [-15 -15 50 50]) ;ESTO HAY QUE BORRARLO, ESO SOLO DE PRUEBA
+(def inicio-primera-linea "<svg viewBox=\"")
+(def final-primera-linea  "\" xmlns=\"http://www.w3.org/2000/svg\">")
+(def ultima-linea "</svg>")
+
+(defn crear-tortuga [angulo pos-x pos-y]
+  {:angulo angulo
+   :angulo-acumulado angulo-acumulado-inicial
+   :pos-x pos-x
+   :pos-y pos-y
+   :pluma true
+   :color "black"
+   :ancho-pluma ancho-pluma})
+
+(defn getter-angulo [tortuga]
+  (tortuga :angulo))
+(defn getter-angulo-acumulado [tortuga]
+  (tortuga :angulo-acumulado))
+(defn getter-pos-x [tortuga]
+  (tortuga :pos-x))
+(defn getter-pos-y [tortuga]
+  (tortuga :pos-y))
+(defn getter-pluma [tortuga]
+  (tortuga :pluma))
+
+(defn setter-angulo [tortuga nueva-angulo]
+  (assoc tortuga :angulo nueva-angulo))
+(defn setter-angulo-acumulado [tortuga nuevo-angulo]
+  (assoc tortuga :angulo-acumulado nuevo-angulo))
+(defn setter-pos-x [tortuga nueva-x]
+  (assoc tortuga :pos-x nueva-x))
+(defn setter-pos-y [tortuga nueva-y]
+  (assoc tortuga :pos-y nueva-y))
+(defn setter-pluma [tortuga estado-pluma]
+  (assoc tortuga :pluma estado-pluma))
+
+
+;VER SI EL FORMATO ANDA POR EL TEMA DE LAS COMILLAS!!!
+;Para el "v2" se puede hacer un vector que sea constante y declararlo con "def"
+(defn join-vectors [x1 y1 x2 y2 stroke-width stroke]
+  (let [v1 [(str x1) (str y1) (str x2) (str y2) (str stroke-width) (str stroke)]
+        v2 ["<line x1=\""  "\" y1=\"" "\" x2=\"" "\" y2=\"" "\" stroke-width=\"" "\" stroke=\""]]
+    (str (apply str(map str v2 v1))  "\" />")))
+
+
+;VERRRR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+;SI HACE FALTA CONTEMPLAR EL DERECHA O IZQUIERDA CON EL SIGNO NEGATIVO PARA LA "y" POR
+;EL TEMA DEL EJECARTESIANO
+(defn cambio-angulo [tortuga sentido]
+  (let [ang (getter-angulo tortuga)
+        ang-acumulado (getter-angulo-acumulado tortuga)]
+    (case sentido
+      \+ (setter-angulo-acumulado tortuga (- ang-acumulado ang))
+      \- (setter-angulo-acumulado tortuga (+ ang-acumulado ang))
+      \| (setter-angulo-acumulado tortuga (+ 180 ang-acumulado))
+      :else tortuga)))          ;DEVUELVE UNA COPIA DE TORTUGA
+
+;VERRRRRR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+;SI EL MENOS DE LA COORDENADA "y" ESTÁ ES CORRECTA, DEBIDO A QUE EL EJE Y ESTÁ INVERTIDO
+(defn mover-tortuga [tortuga]
+  (let [a (java.lang.Math/toRadians(getter-angulo-acumulado tortuga))
+        avance-en-x (* avance-tortuga (Math/cos a))
+        avance-en-y (* avance-tortuga (Math/sin a))
+        pos-inicial-x (getter-pos-x tortuga)
+        pos-inicial-y (getter-pos-y tortuga)
+        pos-final-x (+ pos-inicial-x avance-en-x)
+        pos-final-y (- pos-inicial-y avance-en-y)]
+    (-> tortuga
+        (setter-pos-x pos-final-x)          ;SE ENVIARÀ UNA COPIA DE TORTUGA
+        (setter-pos-y pos-final-y))))       ;SE ENVIARÀ UNA COPIA DE TORTUGA
+
+(defn pluma-arriba [tortuga]
+  (setter-pluma tortuga false))             ;SE ENVIARÀ UNA COPIA DE TORTUGA
+
+(defn pluma-abajo [tortuga]
+  (setter-pluma tortuga true))
+
+;recibirá la copia de la tortuga anterior y a partir de los datos de ella se apilará "la nueva tortuga"
+(defn apilar-tortuga [v-pila tortuga]
+  (-> v-pila
+      (assoc (dec (count v-pila)) tortuga)
+      (conj tortuga)))
+
+(defn desapilar-tortuga [v-pila movimientos]
+  (let [pila-actualizada (pop v-pila)
+        tortuga-a-emplear (peek pila-actualizada)]
+    [pila-actualizada tortuga-a-emplear movimientos]))      ;VERIFICAR QUE EL PUSH/POP SE HAGA SOBRE EL PRIMER ELEMENTO
+
+
+;en el vector "movimientos" se apilará el movimiento nuevo que se le pasará al SVG
+;esta funcion devuelve un vector, pues movs es de tipo "vector" y conj devuelve el mismo tipo
+(defn pre-svg [movimientos t-estado-1 t-estado-2]
+  (let [movs movimientos
+        t1 t-estado-1
+        t2 t-estado-2]
+    (conj movs (join-vectors (getter-pos-x t1)(getter-pos-y t1)(getter-pos-x t2)(getter-pos-y t2) grosor-pluma color-negro))))
+
+
+;PARA QUE UN VECTOR ACTÚE COMO UNA LISTA SE DEBEN USAR LOS COMANDOS: "(conj v 5)" y "(pop v)", siendo "v" el vector
+(defn enviar-a-mover [tortugas tortuga movimientos]
+  (let [t-estado-1 tortuga
+        t-estado-2 (mover-tortuga tortuga)
+        movs movimientos]
+    (if (= true (getter-pluma t-estado-1))
+      [tortugas t-estado-2 (pre-svg movs t-estado-1 t-estado-2)]
+      [tortugas (pluma-abajo t-estado-2) movimientos]))) ;VUELVE A DEJAR LA PLUMA ABAJO (true)
+
+(defn movimiento-tortuga [tortuga guia]
+  (let [tortugas-inicial (conj [] tortuga)
+        movimientos-inicial []]
+    (reduce (fn [[tortugas tortuga movimientos] %]          ;ELIMINAR LA FUNCION: "tortuga-actual"
+              (cond
+                (or (= \F %) (= \G %))
+                (enviar-a-mover tortugas tortuga movimientos) ;RECIBE UN VECTOR CON TRES ELEMENTOS
+
+                (or (= \f %) (= \g %))
+                (enviar-a-mover tortugas (pluma-arriba tortuga) movimientos)
+
+                (or (= \+ %) (= \- %) (= \| %))
+                [tortugas (cambio-angulo tortuga %) movimientos]
+
+                (= \[ %)
+                [(apilar-tortuga tortugas tortuga) tortuga movimientos]
+
+                (= \] %)
+                (desapilar-tortuga tortugas movimientos)
+
+                :else [tortugas tortuga movimientos]))
+            [tortugas-inicial tortuga movimientos-inicial] guia)))
+
+
+;Recibe un vector donde esten las reglas. ejemplo:
+;(generar-reglas ["F XF+F" "G XX-F"])
 ;Y devuelve un diccionario con clave:valor. Ejemplo:
-;{F:"FF", G:"FG"}
-(defn generar_reglas [v]
+;{:F "XF+F", :G "XX-F"} , (OJO!! que la clave es una "keyword")
+(defn generar-reglas [v]
   (reduce (fn [acc x]
-            (let [regla_k (first x)
-                  regla_v (subs x 2)]
-              (assoc acc (str regla_k) regla_v)))
+            (let [regla-key (first x)
+                  regla-value (subs x 2)]
+              (assoc acc (keyword (str regla-key)) regla-value)))
           {} v))
 
-(defn parser [s]
+(defn parser-line [s]
   (reduce (fn [acc x]
             (if (not= x \newline)
               (str acc x)
@@ -23,95 +163,87 @@
 
 ;; Tener presente que "drop" devuelve una secuencia, y al final del let lo que se está concatenando
 ;;es un string, por eso hay que utilizar "apply str"
-(defn split [s]
+;devuelve un vector de strings. (Ej: recibiendo: "(parser-file "25\nX\nF XF+F\nG XX-F\n")"
+;devolverá: "["25" "X" "F XF+F" "G XX-F"]"
+(defn parser-file [s]
   (if (<= (count s) 0)
     '()
-    (let [linea (parser s)
+    (let [linea (parser-line s)
           resto (drop (inc (count linea)) s)]
-      (vec (cons linea (split (apply str resto)))))))
+      (vec (cons linea (parser-file (apply str resto)))))))
 
-(defn leer_archivo [archivo]
+(defn leer-archivo [archivo]
   (slurp archivo))
 
-;devuelve una sublista de a inclusive hasta b no inclussive
-(defn sublista [lista a b]
-  (let [lista-a-vector (apply vector lista)]
-    (apply list (subvec lista-a-vector a b))))
+(defn etapa-lectura [archivo]
+  (-> archivo
+      (leer-archivo)
+      (parser-file)))
 
-;Devuelve un vector donde: 
-;pos 0: el angulo
-;pos 1: el axioma 
-;pos 2: un diccionario co las reglas correspondientes
-;pos 3: la catidad de iteraciones
-;pos 4: el archivo de escritura
-(defn obtener-informacion [args]
-  (let [contenido-arch-read (leer_archivo (first args))
-        obtener-lista-arch-read (split contenido-arch-read)
-        obtener-directorio-reglas (generar_reglas (subvec obtener-lista-arch-read 2 (+ 1 (count obtener-lista-arch-read))));Obtiene una lista con un elemento que sera el directorio con las reglas
-        obtener-lista-grado-axioma (subvec obtener-lista-arch-read 0 2)
-        obtener-lista-iteracion-arch-write (vector (sublista args 2 4))];;VER DE QUE TIPO ES arg, SI ES UN VECTOR ENTONCES REEMPLAZAR POR: nth args 2 4.
-    (concat obtener-lista-grado-axioma obtener-directorio-reglas obtener-lista-iteracion-arch-write)))
-
-;Devuelve la clave de la pos del directorio
-(defn vector-claves [reglas];NO USADOO!!
-  (vec (map name (keys reglas))))
-
-;Recibe solo una regla
-;Devuelve UN CHAR que es la clave de la regla (el caracter)
-(defn obtener-caracter-clave [regla];NO USADOO!!
-  (nth (str (first regla)) 1))
-
-;Recibe solo una regla
-;Devuelve el valor de la regla recivida
-(defn obtener-valor-regla [regla];NO USADOO!!
-  (str (nth regla 1)))
-
-;TRADUCIR:
-;Devuelve un string con todas las reglas aplicadas
-;Explicacion de losparametros:
-;Axioma: sera una cadena de caracteres donde se le va a aplicar las reglas. Ejm un axioma puede ser F+G+FG
-;Reglas: es un diccionario  donde en las claves estaran los caracteres que se van a traucir en el axioma,
-;        Ejm las reglas pueden ser {:F "FF", :G "GF", :X "G-G+F"}
-;Explicacion Codigo:
-;A cada caracter de la cadena de caracteres de "axioma" se le va a aplicar una funcion anonima, donde dicha
-;funcion anonima va a obtener del diccionario "reglas" el valor de la clave que recibe por parametro
-;(en este caso (keyword (str %) me devuelve la clave [(ejm devuelve -> :F o :G o :X, etc)] del str recibido ([ejm "F" o "G" o "X", etc]) )
-;Y en tal caso de que la clave que no exista va a devolver el caracter recibio casteado a str:  #(get reglas (keyword (str %)) (str %))
-;                                                                                                                                  ^
 (defn traducir [reglas axioma]
   (apply str (map #(get reglas (keyword (str %)) (str %)) axioma)))
 
-;TORTUGA
-;Devuelve un vector donde en cada posicion del vector representa la salida de cada iteracion
-;Explicacion de los parametros:
-;Axioma: sera una cadena de caracteres donde se le va a aplicar las reglas. Ejm un axioma puede ser F+G+FG
-;Reglas: es un diccionario  donde en las claves estaran los caracteres que se van a traucir en el axioma,
-;        Ejm las reglas pueden ser {:F "FF", :G "GF", :X "G-G+F"}
-;Iteraciones: La cantidad de iteraciones que se va a traducir el Axioma
-;Explicacion del coigo:
-;Si las iteraciones llegaron a 0, quiere decir que ta se va a dejar de traducir el axioma
-;En cambio si es distinto de 0, eso quiere decir que se tiene que seguir traduciendo el axioma
-;Y ademas en cada iteracion se va a modificar el axioma ya que se traduce en cada iteracion (Se
-;va reemplazando los valores) y al final junto todas las salidas de cada iteracion en un vector
-(defn tortuga [iteraciones axioma reglas]
+;;funcion que en el TP se llama "tortuga"
+(defn guia-para-tortuga [iteraciones axioma reglas]
   (if (= iteraciones 0)
-    '[]
+    axioma
     (let [nuevo-axioma (traducir reglas axioma)]
-      (conj (tortuga (dec iteraciones) nuevo-axioma reglas) axioma))))
+      (guia-para-tortuga (dec iteraciones) nuevo-axioma reglas))))
 
-;Aca se escribe en el archivo svg, pero creo que antes hat que hacer una serie de cosas
-(defn escribir-archivo [lista-iteraciones]
-  ())
 
-;Comenzar todo el proceso del dibujo
-(defn comenzar [vector]
-  (let [dibujo-tortuga (tortuga (nth vector 3) (nth vector 1) (nth vector 2))
-        estritura (escribir-archivo dibujo-tortuga)]))
+;en esta funcion se filtra el caso borde en el que se pase como numero de iteraciones el cero
+;devolviendo inmediatamete el valor del axioma como guía, caso contrario empieza a iterar
+;para obtener la guia
+#_
+(defn guia-para-tortuga [iteraciones axioma reglas]
+  (if (= iteraciones 0)
+    axioma
+    (generacion-guia-para-tortuga iteraciones axioma reglas)))
 
-;;cant_iteraciones archivo_svg
+(defn obtencion-angulo-guia [archivo-lectura iteraciones]
+  (let [vector-base (etapa-lectura archivo-lectura)          ;vector base:(pos 0: angulo; pos 1: axioma; > pos 1: reglas)
+        angulo (first vector-base)
+        axioma (second vector-base)
+        reglas (generar-reglas (vec (drop 2 vector-base))) ;devuelve un diccionario con la reglas
+        guia (guia-para-tortuga iteraciones axioma reglas)]
+    [angulo guia]))
+
+(defn obtencion-vector-para-svg [tortuga guia]
+  (-> tortuga
+      (movimiento-tortuga guia)))
+
+;pasa el vector de limites a string
+(defn vec-de-lim-a-str [vector-de-limites]
+  (let [str-vec (str vector-de-limites)]
+    (subs str-vec 1 (- (count str-vec) 1))))
+
+;Coloca los limites en la primera linea del svg
+(defn inicializar-primera-linea [comienzo-primera-linea ultima-parte-primera-linea]
+  (let [limites (vec-de-lim-a-str limites_display_svg)]
+    (str comienzo-primera-linea limites ultima-parte-primera-linea)))
+
+;Obtiene un vector con la primera y la ultima fila del arch svg
+(defn obtencion-vector-svg [linea vec-movimientos]
+  (vec (cons linea (conj vec-movimientos ultima-linea))))
+
+;Escribe en el archivo svg
+(defn escritura-svg [archivo-escritura movimientos] 
+  (let [primera-linea (inicializar-primera-linea inicio-primera-linea final-primera-linea)
+        vec-lineas-svg-totales (obtencion-vector-svg primera-linea movimientos)]
+    (spit archivo-escritura (str/join "\n" vec-lineas-svg-totales))))
+
 (defn -main [& args]
-  (if (not= (count args) 1)                               ;;3
-    (println "Debes ingresar 1 argumentos para ejecutar el programa (ruta archivo lectura, cantidad de veces
+  (if (not= (count args) 3)                               ;;3
+    (println "Debes ingresar 2 argumentos para ejecutar el programa (ruta archivo lectura, cantidad de veces
     a implementar el fractal, ruta archivo escritura\n")
-    (comenzar (obtener-informacion args))))
+    (let [vector-angulo-guia (obtencion-angulo-guia (first args) (Integer/parseInt (second args)))
+          angulo (Double/parseDouble(first vector-angulo-guia))   ;VER MANEJO DE ERRORES (VALIDAR NUMERO)
+          guia (second vector-angulo-guia)
+          tortuga (crear-tortuga angulo pos-inicial-x pos-inicial-y)
+          vector-para-svg (obtencion-vector-para-svg tortuga guia)
+          movimientos-svg (nth vector-para-svg pos-movimientos)]
+      (escritura-svg (nth args 2) movimientos-svg))))
+
+
+
 
