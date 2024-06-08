@@ -4,7 +4,7 @@
 
 (def avance-tortuga 1)
 (def color-negro "black")
-(def angulo-acumulado-inicial 0)
+(def angulo-acumulado-inicial 90)
 (def grosor-pluma "1")
 (def ancho-pluma 1)
 (def pos-inicial-x 0)
@@ -113,7 +113,7 @@
 
 
 (defn pos-maxima [pos-1 pos-2 pos-3]
-  (min pos-1 pos-2 pos-3))
+  (max pos-1 pos-2 pos-3))
 (defn pos-minima [pos-1 pos-2 pos-3]
   (min pos-1 pos-2 pos-3))
 
@@ -205,12 +205,30 @@
 (defn traducir [reglas axioma]
   (apply str (map #(get reglas (keyword (str %)) (str %)) axioma)))
 
+
+(defn obtener-ancho-alto [min max]
+  (cond
+    (and (<= min 0) (<= max 0))
+    (+ (abs min) max)
+
+    (and (<= min 0) (>= max 0))
+    (+ (abs min) max)
+
+    (and (>= min 0) (>= max 0))
+    (- max min)
+    :else nil
+    ))
+
+
+
 (defn obtencion-limites-display [coord-limit]
   (let [x-min (- (coord-limit 0) recuadro-movimiento )
         y-min (- (coord-limit 1) recuadro-movimiento)
         x-max (+ (coord-limit 2) recuadro-movimiento)
-        y-max (+ (coord-limit 3) recuadro-movimiento)]
-    [x-min y-min x-max y-max]))
+        y-max (+ (coord-limit 3) recuadro-movimiento)
+        ancho (obtener-ancho-alto x-min x-max)
+        alto (obtener-ancho-alto y-min y-max)]
+    [x-min y-min ancho alto]))
 
 ;;funcion que en el TP se llama "tortuga"
 (defn guia-para-tortuga [iteraciones axioma reglas]
@@ -259,7 +277,7 @@
           movimientos-svg (nth vector-para-svg pos-movimientos)
           limites-display-svg (obtencion-limites-display (nth vector-para-svg pos-limites))] ;[x-min y-min x-max y-max]]
       (escritura-svg (nth args 2) movimientos-svg limites-display-svg))))
-
-
+;(println limites-display-svg (nth vector-para-svg pos-limites))
+;
 
 
