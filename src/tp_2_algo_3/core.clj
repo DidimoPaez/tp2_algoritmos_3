@@ -14,7 +14,6 @@
 
 (def limites-coordenadas-inicial [0 0 0 0])
 (def recuadro-movimiento 0)
-;(def limites-display-svg [-15 -15 50 50]) ;ESTO HAY QUE BORRARLO, ESO SOLO DE PRUEBA///////////////////
 (def inicio-primera-linea "<svg viewBox=\"")
 (def final-primera-linea  "\" xmlns=\"http://www.w3.org/2000/svg\">")
 (def ultima-linea "</svg>")
