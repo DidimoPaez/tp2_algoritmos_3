@@ -48,8 +48,6 @@
 (defn getter-pluma [tortuga]
   (tortuga :pluma))
 
-(defn setter-angulo [tortuga nueva-angulo]
-  (assoc tortuga :angulo nueva-angulo))
 ;Modifica el angulo acomulado de la tortuga
 (defn setter-angulo-acumulado [tortuga nuevo-angulo]
   (assoc tortuga :angulo-acumulado nuevo-angulo))
@@ -102,7 +100,7 @@
 (defn pluma-abajo [tortuga]
   (setter-pluma tortuga true))
 
-;recibirá la copia de la tortuga anterior y a partir de los datos de ella se apilará "la nueva tortuga"
+;Recibirá la copia de la tortuga anterior y a partir de los datos de ella se apilará "la nueva tortuga"
 (defn apilar-tortuga [v-pila tortuga]
   (-> v-pila
       (assoc (dec (count v-pila)) tortuga)
@@ -132,7 +130,7 @@
 (defn pos-minima [pos-1 pos-2 pos-3]
   (min pos-1 pos-2 pos-3))
 
-;Acualiza las coordenadas minimas y maximas en X e Y.
+;Actualiza las coordenadas minimas y maximas en X e Y.
 (defn actualizar-coordenadas [coord-limits t-estado-1 t-estado-2]
   (let [t-pos-x1 (getter-pos-x t-estado-1)
         t-pos-x2 (getter-pos-x t-estado-2)
@@ -209,8 +207,8 @@
               (reduced acc)))
           "" s))
 
-;devuelve un vector de strings. (Ej: recibiendo: "(parser-file "25\nX\nF XF+F\nG XX-F\n")"
-;devolverá: "["25" "X" "F XF+F" "G XX-F"]"
+;Devuelve un vector de strings. (Ej: recibiendo: "(parser-file "25\nX\nF XF+F\nG XX-F\n")"
+;Devolverá: "["25" "X" "F XF+F" "G XX-F"]"
 (defn parser-file [s]
   (if (<= (count s) 0)
     '()
