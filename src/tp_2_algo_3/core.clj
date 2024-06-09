@@ -19,6 +19,8 @@
 (def inicio-primera-linea "<svg viewBox=\"")
 (def final-primera-linea  "\" xmlns=\"http://www.w3.org/2000/svg\">")
 (def ultima-linea "</svg>")
+(def formato-linea ["  <line x1=\""  "\" y1=\"" "\" x2=\"" "\" y2=\"" "\" stroke-width=\"" "\" stroke=\""])
+(def formato-fin-de-linea "\" />")
 
 ;Inicializa una tortuga
 (defn crear-tortuga [angulo pos-x pos-y]
@@ -65,8 +67,8 @@
 ;Devolvera un string con una nueva linea de SVG que corresponde a un movimiento de la tortuga. 
 (defn join-vectors [x1 y1 x2 y2 stroke-width stroke]
   (let [v1 [(str x1) (str y1) (str x2) (str y2) (str stroke-width) (str stroke)]
-        v2 ["  <line x1=\""  "\" y1=\"" "\" x2=\"" "\" y2=\"" "\" stroke-width=\"" "\" stroke=\""]]
-    (str (apply str (map str v2 v1))  "\" />")))
+        v2 formato-linea]
+    (str (apply str (map str v2 v1))  formato-fin-de-linea)))
 
 ;Devuelve una copia de la tortuga con el valor del angulo modificado dependiendo del sentido que reciba
 (defn cambio-angulo [tortuga sentido]
