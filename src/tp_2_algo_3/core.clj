@@ -2,22 +2,25 @@
   (:gen-class)
   (:require [clojure.string :as str]))
 
+;Constante de la tortuga
 (def avance-tortuga 1)
-(def color-negro "black")
 (def angulo-acumulado-inicial 90)
-(def grosor-pluma "1")
 (def ancho-pluma 1)
 (def pos-inicial-x 0)
 (def pos-inicial-y 0)
 (def pos-movimientos 2)
 (def pos-limites 3)
-
 (def limites-coordenadas-inicial [0 0 0 0])
+
+;Constante del SVG
+(def grosor-pluma "1")
+(def color-negro "black")
 (def recuadro-movimiento 0)
 (def inicio-primera-linea "<svg viewBox=\"")
 (def final-primera-linea  "\" xmlns=\"http://www.w3.org/2000/svg\">")
 (def ultima-linea "</svg>")
 
+;Inicializa una tortuga
 (defn crear-tortuga [angulo pos-x pos-y]
   {:angulo angulo
    :angulo-acumulado angulo-acumulado-inicial
@@ -27,40 +30,45 @@
    :color "black"
    :ancho-pluma ancho-pluma})
 
+;Obtener el angulo de una tortuga
 (defn getter-angulo [tortuga]
   (tortuga :angulo))
+;Obtener el angulo acomulado de una tortuga
 (defn getter-angulo-acumulado [tortuga]
   (tortuga :angulo-acumulado))
+;Obtener la posicion X de una tortuga
 (defn getter-pos-x [tortuga]
   (tortuga :pos-x))
+;Obtener la posicion Y de una tortuga
 (defn getter-pos-y [tortuga]
   (tortuga :pos-y))
+;Obtener si la pluma esta arriba o abajo
 (defn getter-pluma [tortuga]
   (tortuga :pluma))
 
 (defn setter-angulo [tortuga nueva-angulo]
   (assoc tortuga :angulo nueva-angulo))
+;Modifica el angulo acomulado de la tortuga
 (defn setter-angulo-acumulado [tortuga nuevo-angulo]
   (assoc tortuga :angulo-acumulado nuevo-angulo))
+;Modifica la pos X de la tortuga
 (defn setter-pos-x [tortuga nueva-x]
   (assoc tortuga :pos-x nueva-x))
+;Modifica la pos Y de la tortuga
 (defn setter-pos-y [tortuga nueva-y]
   (assoc tortuga :pos-y nueva-y))
+;Modifica la el estado de la pluma (coloca la pluma arriba o pluma abajo)
 (defn setter-pluma [tortuga estado-pluma]
   (assoc tortuga :pluma estado-pluma))
 
-
-;VER SI EL FORMATO ANDA POR EL TEMA DE LAS COMILLAS!!!
-;Para el "v2" se puede hacer un vector que sea constante y declararlo con "def"
+;Recibe la posicion de X e Y de partida y de llegada.
+;Devolvera un string con una nueva linea de SVG que corresponde a un movimiento de la tortuga. 
 (defn join-vectors [x1 y1 x2 y2 stroke-width stroke]
   (let [v1 [(str x1) (str y1) (str x2) (str y2) (str stroke-width) (str stroke)]
         v2 ["  <line x1=\""  "\" y1=\"" "\" x2=\"" "\" y2=\"" "\" stroke-width=\"" "\" stroke=\""]]
-    (str (apply str(map str v2 v1))  "\" />")))
+    (str (apply str (map str v2 v1))  "\" />")))
 
-
-;VERRRR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-;SI HACE FALTA CONTEMPLAR EL DERECHA O IZQUIERDA CON EL SIGNO NEGATIVO PARA LA "y" POR
-;EL TEMA DEL EJECARTESIANO
+;Devuelve una copia de la tortuga con el valor del angulo modificado dependiendo del sentido que reciba
 (defn cambio-angulo [tortuga sentido]
   (let [ang (getter-angulo tortuga)
         ang-acumulado (getter-angulo-acumulado tortuga)]
@@ -68,12 +76,12 @@
       \+ (setter-angulo-acumulado tortuga (- ang-acumulado ang))
       \- (setter-angulo-acumulado tortuga (+ ang-acumulado ang))
       \| (setter-angulo-acumulado tortuga (+ 180 ang-acumulado))
-      :else tortuga)))          ;DEVUELVE UNA COPIA DE TORTUGA
+      :else tortuga)))
 
-;VERRRRRR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-;SI EL MENOS DE LA COORDENADA "y" ESTÁ ES CORRECTA, DEBIDO A QUE EL EJE Y ESTÁ INVERTIDO
+;Mueve la tortuga.
+;Devuelve una tortuga con las posiciones correspondientes al movimiento realizado.
 (defn mover-tortuga [tortuga]
-  (let [a (java.lang.Math/toRadians(getter-angulo-acumulado tortuga))
+  (let [a (java.lang.Math/toRadians (getter-angulo-acumulado tortuga))
         avance-en-x (* avance-tortuga (Math/cos a))
         avance-en-y (* avance-tortuga (Math/sin a))
         pos-inicial-x (getter-pos-x tortuga)
@@ -81,12 +89,14 @@
         pos-final-x (+ pos-inicial-x avance-en-x)
         pos-final-y (- pos-inicial-y avance-en-y)]
     (-> tortuga
-        (setter-pos-x pos-final-x)          ;SE ENVIARÀ UNA COPIA DE TORTUGA
-        (setter-pos-y pos-final-y))))       ;SE ENVIARÀ UNA COPIA DE TORTUGA
+        (setter-pos-x pos-final-x)          
+        (setter-pos-y pos-final-y))))       
 
+;Coloca la pluma  arriba
 (defn pluma-arriba [tortuga]
-  (setter-pluma tortuga false))             ;SE ENVIARÀ UNA COPIA DE TORTUGA
+  (setter-pluma tortuga false))             
 
+;Coloca la pluma  abajo
 (defn pluma-abajo [tortuga]
   (setter-pluma tortuga true))
 
@@ -96,28 +106,31 @@
       (assoc (dec (count v-pila)) tortuga)
       (conj tortuga)))
 
+;Desapila una tortuga de la pila de tortuga
+;Va a actualizar la pila e tortugas y actualizara la nueva tortuga a mover.
 (defn desapilar-tortuga [v-pila movimientos coord-limits]
   (let [pila-actualizada (pop v-pila)
         tortuga-a-emplear (peek pila-actualizada)]
-    [pila-actualizada tortuga-a-emplear movimientos coord-limits]))       ;VERIFICAR QUE EL PUSH/POP SE HAGA SOBRE EL PRIMER ELEMENTO
+    [pila-actualizada tortuga-a-emplear movimientos coord-limits])) 
 
-
-;en el vector "movimientos" se apilará el movimiento nuevo que se le pasará al SVG
-;esta funcion devuelve un vector, pues movs es de tipo "vector" y conj devuelve el mismo tipo
+;Recibe el vector de movimientos de la tortuga en el formato svg, el estado de partida  
+;y el estado de llegada de la tortuga actual del movimiento a realizar.
+;Colocara en el vector de movimientos una nueva linea en formato svg que indica el movimieno a indicar de la tortuga
 (defn pre-svg [movimientos t-estado-1 t-estado-2]
   (let [movs movimientos
         t1 t-estado-1
         t2 t-estado-2]
-    (conj movs (join-vectors (getter-pos-x t1)(getter-pos-y t1)(getter-pos-x t2)(getter-pos-y t2) grosor-pluma color-negro))))
+    (conj movs (join-vectors (getter-pos-x t1) (getter-pos-y t1) (getter-pos-x t2) (getter-pos-y t2) grosor-pluma color-negro))))
 
-
-
+;Devuelve la posicion maxima de las posiiones recibidas
 (defn pos-maxima [pos-1 pos-2 pos-3]
   (max pos-1 pos-2 pos-3))
+
+;Devuelve la posicion minima de las posiiones recibidas
 (defn pos-minima [pos-1 pos-2 pos-3]
   (min pos-1 pos-2 pos-3))
 
-
+;Acualiza las coordenadas minimas y maximas en X e Y.
 (defn actualizar-coordenadas [coord-limits t-estado-1 t-estado-2]
   (let [t-pos-x1 (getter-pos-x t-estado-1)
         t-pos-x2 (getter-pos-x t-estado-2)
@@ -129,7 +142,12 @@
         max-y (pos-maxima t-pos-y1 t-pos-y2 (coord-limits 3))]
     [min-x min-y max-x max-y]))
 
-;PARA QUE UN VECTOR ACTÚE COMO UNA LISTA SE DEBEN USAR LOS COMANDOS: "(conj v 5)" y "(pop v)", siendo "v" el vector
+;Realizara el movimiento de la tortuga en una unidad hacia alante. 
+;Se verificara si la pluma esta arriba o abajo para realizar el movimiento correspondiente.
+;Si esta abajo la pluma se va a añadir la linea del dibujo svg en el vector de movimientos, se modificaran las posiciones de la tortuga
+;actual y se actualizar las coordenadas maximas y minimas de todas las tortugas si es necesario
+;Si esta la pluma arriba solo se actualizara la posicion de la tortuga actual y se colocara el la pluma arriba, pero no se va a 
+;guardar la linea en el vector la linea del svg (ya que la pluma esta arriba).
 (defn enviar-a-mover [tortugas tortuga movimientos coord-limits]
   (let [t-estado-1 tortuga
         t-estado-2 (mover-tortuga tortuga)
@@ -137,16 +155,22 @@
         cl coord-limits]
     (if (= true (getter-pluma t-estado-1))
       [tortugas t-estado-2 (pre-svg movs t-estado-1 t-estado-2) (actualizar-coordenadas cl t-estado-1 t-estado-2)]
-      [tortugas (pluma-abajo t-estado-2) movs cl]))) ;VUELVE A DEJAR LA PLUMA ABAJO (true)
+      [tortugas (pluma-abajo t-estado-2) movs cl])))
 
+;Devuelve un vector donde
+;En la posicion 0: Estara un vector de las tortugas que estan en la pila en su estado final.
+;En la posicion 1: LA tortuga actual que se esta moviendo.
+;En la posicion 2: Contiene el vector de la movimientos que va haciendo las diferentes tortugas 
+;                  en el formato de una linea en SVG.
+;En la posicion 3: Contendra un vector con las coordenadas maximas y minimas de X e Y [x-min y-min x-max y-max].
 (defn movimiento-tortuga [tortuga guia]
   (let [tortugas-inicial (conj [] tortuga)
         movimientos-inicial []
         init-coord-limits limites-coordenadas-inicial]
-    (reduce (fn [[tortugas tortuga movimientos coord-limits] %]          ;ELIMINAR LA FUNCION: "tortuga-actual"
+    (reduce (fn [[tortugas tortuga movimientos coord-limits] %]
               (cond
                 (or (= \F %) (= \G %))
-                (enviar-a-mover tortugas tortuga movimientos coord-limits) ;RECIBE UN VECTOR CON TRES ELEMENTOS
+                (enviar-a-mover tortugas tortuga movimientos coord-limits)
 
                 (or (= \f %) (= \g %))
                 (enviar-a-mover tortugas (pluma-arriba tortuga) movimientos coord-limits)
@@ -163,8 +187,6 @@
                 :else [tortugas tortuga movimientos coord-limits]))
             [tortugas-inicial tortuga movimientos-inicial init-coord-limits] guia)))
 
-
-
 ;Recibe un vector donde esten las reglas. ejemplo:
 ;(generar-reglas ["F XF+F" "G XX-F"])
 ;Y devuelve un diccionario con clave:valor. Ejemplo:
@@ -176,6 +198,8 @@
               (assoc acc (keyword (str regla-key)) regla-value)))
           {} v))
 
+;Parsea el string leido
+;Devuelve un string hasa que se topa con un \newline
 (defn parser-line [s]
   (reduce (fn [acc x]
             (if (not= x \newline)
@@ -183,8 +207,6 @@
               (reduced acc)))
           "" s))
 
-;; Tener presente que "drop" devuelve una secuencia, y al final del let lo que se está concatenando
-;;es un string, por eso hay que utilizar "apply str"
 ;devuelve un vector de strings. (Ej: recibiendo: "(parser-file "25\nX\nF XF+F\nG XX-F\n")"
 ;devolverá: "["25" "X" "F XF+F" "G XX-F"]"
 (defn parser-file [s]
@@ -194,18 +216,24 @@
           resto (drop (inc (count linea)) s)]
       (vec (cons linea (parser-file (apply str resto)))))))
 
+;Lee el archivo
 (defn leer-archivo [archivo]
   (slurp archivo))
 
+;Lee el archivo y lo parsea
 (defn etapa-lectura [archivo]
   (-> archivo
       (leer-archivo)
       (parser-file)))
 
+;Recibe el diccionario con las reglas y el axioma a traducir.
+;Recorrera todo el axioma y se fijara si el caracter recibido en la funcion anonima es una clave de una
+;regla, si es asi reemplazarla por su valor, sino colocar el mismo caracter leido. 
 (defn traducir [reglas axioma]
   (apply str (map #(get reglas (keyword (str %)) (str %)) axioma)))
 
-
+;Se va a obener el alto o ancho (dependiendo si se recibe las posiciones en X o en Y)
+;que va a tener el dibujo en SVG.
 (defn obtener-ancho-alto [min max]
   (cond
     (and (<= min 0) (<= max 0))
@@ -216,13 +244,11 @@
 
     (and (>= min 0) (>= max 0))
     (- max min)
-    :else nil
-    ))
+    :else nil))
 
-
-
+;Devuelve un vector con la porsicion maxima y minima en X e Y de todo el svg. 
 (defn obtencion-limites-display [coord-limit]
-  (let [x-min (- (coord-limit 0) recuadro-movimiento )
+  (let [x-min (- (coord-limit 0) recuadro-movimiento)
         y-min (- (coord-limit 1) recuadro-movimiento)
         x-max (+ (coord-limit 2) recuadro-movimiento)
         y-max (+ (coord-limit 3) recuadro-movimiento)
@@ -230,22 +256,24 @@
         alto (obtener-ancho-alto y-min y-max)]
     [x-min y-min ancho alto]))
 
-;;funcion que en el TP se llama "tortuga"
+;Va a traducir el axioma recibido iteradas veces por ende va a actualizar el axioma en cada iteracion.
 (defn guia-para-tortuga [iteraciones axioma reglas]
   (if (= iteraciones 0)
     axioma
     (let [nuevo-axioma (traducir reglas axioma)]
       (guia-para-tortuga (dec iteraciones) nuevo-axioma reglas))))
 
-
+;Recibe el archivo para leer y las iteraciones. 
+;Devuelve un vector con la informacion del angulo y el axioma final resultante de las iteraciones (la guia)
 (defn obtencion-angulo-guia [archivo-lectura iteraciones]
-  (let [vector-base (etapa-lectura archivo-lectura)          ;vector base:(pos 0: angulo; pos 1: axioma; > pos 1: reglas)
+  (let [vector-base (etapa-lectura archivo-lectura)        
         angulo (first vector-base)
         axioma (second vector-base)
-        reglas (generar-reglas (vec (drop 2 vector-base))) ;devuelve un diccionario con la reglas
+        reglas (generar-reglas (vec (drop 2 vector-base)))  
         guia (guia-para-tortuga iteraciones axioma reglas)]
     [angulo guia]))
 
+;Devuelve el vector de l informaion de las orugas con sus movimientos y posiciones minimas y maximas
 (defn obtencion-vector-para-svg [tortuga guia]
   (-> tortuga
       (movimiento-tortuga guia)))
@@ -265,19 +293,17 @@
         vec-lineas-svg-totales (obtencion-vector-svg primera-linea movimientos)]
     (spit archivo-escritura (str/join "\n" vec-lineas-svg-totales))))
 
+;Funcion main
 (defn -main [& args]
-  (if (not= (count args) 3)                               ;;3
-    (println "Debes ingresar 3 argumentos para ejecutar el programa (ruta archivo lectura, cantidad de veces
-    a implementar el fractal, ruta archivo escritura\n")
+  (if (not= (count args) 3)
+    '()
     (let [vector-angulo-guia (obtencion-angulo-guia (first args) (Integer/parseInt (second args)))
-          angulo (Double/parseDouble(first vector-angulo-guia))   ;VER MANEJO DE ERRORES (VALIDAR NUMERO)
+          angulo (Double/parseDouble (first vector-angulo-guia))   
           guia (second vector-angulo-guia)
           tortuga (crear-tortuga angulo pos-inicial-x pos-inicial-y)
           vector-para-svg (obtencion-vector-para-svg tortuga guia)
           movimientos-svg (nth vector-para-svg pos-movimientos)
-          limites-display-svg (obtencion-limites-display (nth vector-para-svg pos-limites))] ;[x-min y-min x-max y-max]]
+          limites-display-svg (obtencion-limites-display (nth vector-para-svg pos-limites))] 
       (escritura-svg (nth args 2) movimientos-svg limites-display-svg))))
-;(println limites-display-svg (nth vector-para-svg pos-limites))
-;
 
 
