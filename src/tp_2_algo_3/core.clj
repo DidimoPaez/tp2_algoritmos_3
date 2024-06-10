@@ -13,9 +13,9 @@
 (def limites-coordenadas-inicial [0 0 0 0])
 
 ;Constante del SVG
-(def grosor-pluma "1")
+(def grosor-pluma "0.1")
 (def color-negro "black")
-(def recuadro-movimiento 0)
+(def recuadro-movimiento 10)
 (def inicio-primera-linea "<svg viewBox=\"")
 (def final-primera-linea  "\" xmlns=\"http://www.w3.org/2000/svg\">")
 (def ultima-linea "</svg>")
