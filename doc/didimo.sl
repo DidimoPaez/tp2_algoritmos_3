@@ -1,0 +1,3 @@
+34
+F
+F F[+FF]FFF[-FFFFF]F
